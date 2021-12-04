@@ -1,4 +1,4 @@
-housesArray = [
+let housesArray = [
     {
         picture: '/img/1.jpg',
         type: 'Entire house',
