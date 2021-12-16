@@ -11,7 +11,7 @@ export default [
     },
     {
         id: 2,
-        picture: 'img/2.jpg',
+        picture: '/img/2.jpg',
         type: 'Entire house',
         town: 'Amsterdam',
         title: 'A flat in Amsterdam with a great view',

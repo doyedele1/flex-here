@@ -3,9 +3,9 @@ import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import houses from '../houses';
 import House from '../components/House';
+import Layout from '../components/Layout';
 
-export default function Home() {
-  return (
+const content = (
     <div>
 
       <h2>Places to stay</h2>
@@ -27,5 +27,8 @@ export default function Home() {
       </style>
 
     </div>
-  )
+)
+
+export default function Home() {
+  return <Layout content={content} />
 }
