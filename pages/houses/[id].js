@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import houses from '../../houses';
 import Layout from "../../components/Layout";
+import DateRangePicker from '../../components/DateRangePicker';
 
 export default function House(props) {
     return (
@@ -17,7 +18,10 @@ export default function House(props) {
                     </p>
                     <p>{props.house.title}</p>
                 </article>
-                <aside></aside>
+                <aside>
+                    <h2>Choose a date</h2>
+                    <DateRangePicker />
+                </aside>
 
                 <style jsx>
                     {`
