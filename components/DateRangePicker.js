@@ -5,6 +5,8 @@ import dateFnsFormat from 'date-fns/format';
 import dateFnsParse from 'date-fns/parse';
 import { DateUtils } from 'react-day-picker';
 
+const format = "dd MMM yyyy";
+
 const parseDate = (str, format, locale) => {
     const parsed = dateFnsParse(str, format, new Date(), { locale });
     return DateUtils.isDate(parsed) ? parsed : null;
@@ -14,11 +16,27 @@ const formatDate = (date, format, locale) => {
     dateFnsFormat(date, format, { locale });
 }
 
-export default function DateRangePicker() {
-    const format = "dd MMM yyyy";
+const today =  new Date();
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+
+const numberOfNightsBetweenDates = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    let dayCount = 0;
+
+    while (end > start) {
+        dayCount++;
+        start.setDate(start.getDate() + 1);
+    }
+
+    return dayCount;
+}
+
+export default function DateRangePicker() {
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(tomorrow);
 
     return (
         <div className="date-range-picker-container">
@@ -27,6 +45,7 @@ export default function DateRangePicker() {
                 <DayPickerInput
                     formatDate={formatDate}
                     format={format}
+                    value={startDate}
                     parseDate={parseDate}
                     placeholder={`${dateFnsFormat(new Date(), format)}`}
                     dayPickerProps={{
@@ -36,7 +55,14 @@ export default function DateRangePicker() {
                             }
                         }
                     }}
-                    onDayChange={(day) => { setStartDate(day) }}
+                    onDayChange={(day) => { 
+                        setStartDate(day);
+                        if (numberOfNightsBetweenDates(day, endDate) < 1) {
+                            const newEndDate = new Date(day);
+                            newEndDate.setDate(newEndDate.getDate() + 1);
+                            setEndDate(newEndDate);
+                        }
+                    }}
                 />
             </div>
             <div>
@@ -44,13 +70,17 @@ export default function DateRangePicker() {
                 <DayPickerInput
                     formatDate={formatDate}
                     format={format}
+                    value={endDate}
                     parseDate={parseDate}
                     placeholder={`${dateFnsFormat(new Date(), format)}`}
                     dayPickerProps={{
                         modifiers: {
-                            disabled: {
-                                before: new Date()
-                            }
+                            disabled: [
+                                startDate,
+                                {
+                                    before: startDate
+                                }
+                            ]
                         }
                     }}
                     onDayChange={(day) => { setEndDate(day) }}
