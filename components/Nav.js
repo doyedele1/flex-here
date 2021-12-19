@@ -29,7 +29,7 @@ export default function Nav(props) {
                 {`
                     .nav-container {
                         border-bottom: 1px solid #eee;
-                        height: 52px;
+                        height: 50px;
                     }
 
                     img {

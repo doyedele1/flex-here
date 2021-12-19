@@ -11,7 +11,7 @@ export default function Layout(props) {
                 {`
                     main {
                         position: relative;
-                        max-width: 55em;
+                        max-width: 56em;
                         background-color: white;
                         padding: 2em;
                         margin: 0 auto;
