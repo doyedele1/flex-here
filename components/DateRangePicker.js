@@ -17,7 +17,6 @@ const formatDate = (date, format, locale) => {
 }
 
 const today =  new Date();
-
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -55,7 +54,7 @@ export default function DateRangePicker() {
                             }
                         }
                     }}
-                    onDayChange={(day) => { 
+                    onDayChange={day => { 
                         setStartDate(day);
                         if (numberOfNightsBetweenDates(day, endDate) < 1) {
                             const newEndDate = new Date(day);
@@ -83,7 +82,9 @@ export default function DateRangePicker() {
                             ]
                         }
                     }}
-                    onDayChange={(day) => { setEndDate(day) }}
+                    onDayChange={day => {
+                        setEndDate(day);
+                    }}
                 />
             </div>
 
