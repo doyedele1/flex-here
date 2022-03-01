@@ -7,3 +7,9 @@
 - Register and login as a user
 - Book houses
 - Manage payments with Stripe
+
+## Tech Stack
+
+**Client:** React, CSS3, Next.js
+
+**Server:** PostgreSQL
