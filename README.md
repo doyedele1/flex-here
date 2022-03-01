@@ -1,5 +1,7 @@
 # FlexHere
 
+A brief description of what this project does and who it's for
+
 ## Features
 
 - Add new houses and visualize existing houses
