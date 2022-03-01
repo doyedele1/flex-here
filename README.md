@@ -12,6 +12,6 @@ Rental marketplace that offers a cutting-edge technological solution for your va
 
 ## Tech Stack
 
-**Client:** React, CSS3, Next.js
+**Client:** CSS3, React, Next.js
 
 **Server:** PostgreSQL
