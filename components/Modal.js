@@ -3,7 +3,7 @@ export default function Modal(props) {
         <div className="nav-container">
             <div 
                 className="modal-background" 
-                onClick={() => console.log('close')}
+                onClick={() => props.close()}
             ></div>
 
             <div className="modal">{props.children}</div>
