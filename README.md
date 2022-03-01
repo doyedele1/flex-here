@@ -1,6 +1,6 @@
 # FlexHere
 
-A brief description of what this project does and who it's for
+Rental marketplace that offers a cutting-edge technological solution for your vacation rentals
 
 ## Features
 
