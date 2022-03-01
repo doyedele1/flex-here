@@ -8,7 +8,7 @@ Rental marketplace that offers a cutting-edge technological solution for your va
 - See houses availability in a calendar
 - Register and login as a user
 - Book houses
-- Manage payments with Stripe
+- Manage payments with Stripe - no additional bonus for multiple guests or discount for longer stays.
 
 ## Tech Stack
 
