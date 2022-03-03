@@ -3,37 +3,47 @@ import Modal from './Modal';
 import { useState } from 'react';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 export default function Layout(props) {
-    const [showModal, setShowModal] = useState(true);
-    const [showSignupModal, setShowSignupModal] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(true);
+    const showModal = useStoreState((state) => state.modals.showModal);
+    const showLoginModal = useStoreState((state) => state.modals.showLoginModal);
+    const showSignupModal = useStoreState(
+        (state) => state.modals.showSignupModal
+    );
+
+    const setHideModal = useStoreActions((actions) => actions.modals.setHideModal);
+    const setShowSignupModal = useStoreActions(
+        (actions) => actions.modals.setShowSignupModal
+    );
+    const setShowLoginModal = useStoreActions(
+        (actions) => actions.modals.setShowLoginModal
+    );
 
     return (
         <div>
             <Nav />
             <main>{props.content}</main>
-            
-            {
-                showModal && <Modal close={() => setShowModal(false)}>
-                    {showLoginModal && (
-                        <LoginModal 
-                            showSignup = {() => {
-                                setShowSignupModal(true)
-                                setShowLoginModal(false)
-                            }}
-                        />
-                    )}
-                    {showSignupModal && (
-                        <SignupModal
-                            showLogin = {() => {
-                                setShowSignupModal(false)
-                                setShowLoginModal(true)
-                            }}
-                        />
-                    )}
 
-                </Modal>
+            {
+                showModal && (
+                    <Modal close={() => setHideModal()}>
+                        {showLoginModal && (
+                            <LoginModal 
+                                showSignup = {() => {
+                                    setShowSignupModal()
+                                }}
+                            />
+                        )}
+                        {showSignupModal && (
+                            <SignupModal
+                                showLogin = {() => {
+                                    setShowLoginModal()
+                                }}
+                            />
+                        )}
+                    </Modal>
+                )
             }
 
             <style jsx>
