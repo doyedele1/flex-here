@@ -6,8 +6,9 @@ import DateRangePicker from '../../components/DateRangePicker';
 import { House as HouseModel } from '../../model.js';
 
 import Cookies from 'cookies';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -23,9 +24,11 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
 }
 
 export default function House({ house, flexhere_session }) {
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
     const [dateChosen, setDateChosen] = useState(false);
     const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(0);
-
+    const loggedIn = useStoreState((state) => state.login.loggedIn);
     const setShowLoginModal = useStoreActions(
         (actions) => actions.modals.setShowLoginModal
     );
@@ -56,6 +59,8 @@ export default function House({ house, flexhere_session }) {
                         datesChanged={(startDate, endDate) => {
                             setNumberOfNightsBetweenDates(calcNumberOfNightsBetweenDates(startDate, endDate));
                             setDateChosen(true);
+                            setStartDate(startDate);
+                            setEndDate(endDate);
                         }}
                     />
 
@@ -67,14 +72,42 @@ export default function House({ house, flexhere_session }) {
                             <p>
                                 ${(numberOfNightsBetweenDates * house.price).toFixed(2)}
                             </p>
-                            <button 
-                                className="reserve" 
-                                onClick={() => {
-                                    setShowLoginModal();
-                                }}
-                            >
-                                Reserve
-                            </button>{' '}
+                            {
+                                loggedIn ? (
+                                    <button 
+                                        className="reserve" 
+                                        onClick={async () => {
+                                            try {
+                                                const response = await axios.post('/api/reserve', {
+                                                    houseId: house.id,
+                                                    startDate,
+                                                    endDate,
+                                                })
+                                                if (response.data.status === 'error') {
+                                                    alert(response.data.message);
+                                                    return;
+                                                }
+                                                console.log(response.data);
+                                            }
+                                            catch (error) {
+                                                console.log(error);
+                                                return;
+                                            }
+                                        }}
+                                    >
+                                        Reserve now
+                                    </button>
+                                ) : (
+                                    <button 
+                                        className="reserve" 
+                                        onClick={() => {
+                                            setShowLoginModal();
+                                        }}
+                                    >
+                                        Log in to Reserve
+                                    </button>
+                                )
+                            }
                         </div>
                     )}
                 </aside>
