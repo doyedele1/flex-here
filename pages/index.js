@@ -1,9 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
 import houses from '../houses';
 import House from '../components/House';
 import Layout from '../components/Layout';
+
+import Cookies from 'cookies';
+import { useStoreActions } from 'easy-peasy';
+import { useEffect } from 'react';
 
 const content = (
     <div>
@@ -30,6 +35,24 @@ const content = (
     </div>
 )
 
-export default function Home() {
+export default function Home({ flexhere_session }) {
+  const setLoggedIn = useStoreActions((actions) => actions.login.setLoggedIn);
+  useEffect(() => {
+    if (flexhere_session) {
+      setLoggedIn(true);
+    }
+  }, []);
+
   return <Layout content={content} />
+}
+
+export async function getServerSideProps({ req, res, query }) {
+  const cookies = new Cookies(req, res);
+  const flexhere_session = cookies.get('flexhere_session');
+
+  return {
+    props: {
+      flexhere_session: flexhere_session || null
+    }
+  };
 }

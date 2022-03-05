@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 export default function Nav(props) {
+    const loggedIn = useStoreState((state) => state.login.loggedIn);
+    const setLoggedIn = useStoreActions((actions) => actions.login.setLoggedIn);
     const setShowLoginModal = useStoreActions(
         (actions) => actions.modals.setShowLoginModal
     )
@@ -18,20 +20,33 @@ export default function Nav(props) {
                 </a>
             </Link>
             
-            <nav>
-                <ul>
-                    <li>
-                        <a href="#" onClick={() => setShowSignupModal()}>
-                            Sign up
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" onClick={() => setShowLoginModal()}>
-                            Log in
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {
+                loggedIn ? (
+                    <nav>
+                        <ul>
+                            <li>
+                                <a>Logged in</a>
+                            </li>
+                        </ul>
+                    </nav>
+                ) : (
+                    <nav>
+                        <ul>
+                            <li>
+                                <a href="#" onClick={() => setShowSignupModal()}>
+                                    Sign up
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onClick={() => setShowLoginModal()}>
+                                    Log in
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                )
+            }
+            
 
             <style jsx>
                 {`
