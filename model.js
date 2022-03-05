@@ -43,5 +43,48 @@ User.prototype.isPasswordValid = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
 
-export { sequelize, User };
+class House extends Sequelize.Model {}
 
+House.init(
+    {
+        id: {
+            type: Sequelize.DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        picture: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false
+        },
+        type: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false
+        },
+        town: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false
+        },
+        title: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false
+        },
+        price: {
+            type: Sequelize.DataTypes.INTEGER,
+            allowNull: false
+        },
+        owner: {
+            type: Sequelize.DataTypes.INTEGER,
+            allowNull: false
+        }
+    },
+    {
+        sequelize,
+        modelName: 'house',
+        timestamps: false
+    }
+)
+
+export { sequelize, User, House };
+
+User.sync({ alter: true });
+House.sync({ alter: true });

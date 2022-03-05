@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import Cookies from 'cookies';
-import { User, sequelize } from '../../../model.js';
+import { User, House, sequelize } from '../../../model.js';
 
 const randomString = (length) => {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -16,6 +16,7 @@ export default async (req, res) => {
         res.status(405).end();
         return;
     }
+    // House.sync();
 
     const { email, password } = req.body;
 

@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
-import houses from '../../houses';
 import Layout from '../../components/Layout';
 import DateRangePicker from '../../components/DateRangePicker';
+import { House as HouseModel } from '../../model.js';
 
 import Cookies from 'cookies';
 import { useStoreActions } from 'easy-peasy';
@@ -19,7 +19,7 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
         start.setDate(start.getDate() + 1);
     }
 
-    return dayCount
+    return dayCount;
 }
 
 export default function House({ house, flexhere_session }) {
@@ -29,7 +29,6 @@ export default function House({ house, flexhere_session }) {
     const setShowLoginModal = useStoreActions(
         (actions) => actions.modals.setShowLoginModal
     );
-
     const setLoggedIn = useStoreActions((actions) => actions.login.setLoggedIn);
 
     useEffect(() => {
@@ -104,10 +103,11 @@ export async function getServerSideProps({ req, res, query }) {
     const { id } = query;
     const cookies = new Cookies(req, res);
     const flexhere_session = cookies.get('flexhere_session');
+    const house = await HouseModel.findByPk(id);
 
     return {
         props: {
-            house: houses.filter((house) => house.id === parseInt(id))[0],
+            house: house.dataValues,
             flexhere_session: flexhere_session || null
         }
     };
