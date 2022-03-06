@@ -23,7 +23,25 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
     return dayCount;
 }
 
-export default function House({ house, flexhere_session }) {
+const getBookedDates = async id => {
+    try {
+        const response = await axios.post(
+            'http://localhost:3000/api/houses/booked', 
+            { houseId: id }
+        );
+        if (response.data.status === 'error') {
+            alert(response.data.message);
+            return;
+        }
+        return response.data.dates;
+    }
+    catch (error) {
+        console.log(error);
+        return;
+    }
+}
+
+export default function House({ house, flexhere_session, bookedDates }) {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [dateChosen, setDateChosen] = useState(false);
@@ -62,6 +80,7 @@ export default function House({ house, flexhere_session }) {
                             setStartDate(startDate);
                             setEndDate(endDate);
                         }}
+                        bookedDates={bookedDates}
                     />
 
                     {dateChosen && (
@@ -137,11 +156,13 @@ export async function getServerSideProps({ req, res, query }) {
     const cookies = new Cookies(req, res);
     const flexhere_session = cookies.get('flexhere_session');
     const house = await HouseModel.findByPk(id);
+    const bookedDates = await getBookedDates(id);
 
     return {
         props: {
             house: house.dataValues,
-            flexhere_session: flexhere_session || null
+            flexhere_session: flexhere_session || null,
+            bookedDates
         }
     };
 }
