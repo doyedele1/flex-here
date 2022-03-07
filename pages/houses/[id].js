@@ -9,6 +9,7 @@ import Cookies from 'cookies';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { formatRelativeWithOptions } from 'date-fns/fp';
 
 const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -40,6 +41,25 @@ const getBookedDates = async id => {
         return;
     }
 }
+
+const canReserve = async (houseId, startDate, endDate) => {
+    try {
+        const response = await axios.post(
+            'http://localhost:3000/api/houses/check',
+            { houseId, startDate, endDate }
+        );
+        if (response.data.status === 'error') {
+            alert(response.data.message);
+            return;
+        }
+        if (response.data.message == 'not free') return false;
+        return true;
+    }
+    catch (error) {
+        console.log(error);
+        return;
+    }
+    }
 
 export default function House({ house, flexhere_session, bookedDates }) {
     const [startDate, setStartDate] = useState();
@@ -96,6 +116,10 @@ export default function House({ house, flexhere_session, bookedDates }) {
                                     <button 
                                         className="reserve" 
                                         onClick={async () => {
+                                            if (!(await canReserve(house.id, startDate, endDate))) {
+                                                alert('These dates are not available');
+                                                return;
+                                            }
                                             try {
                                                 const response = await axios.post('/api/reserve', {
                                                     houseId: house.id,
