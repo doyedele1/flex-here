@@ -108,6 +108,14 @@ Booking.init(
         endDate: {
             type: Sequelize.DataTypes.DATEONLY,
             allowNull: false
+        },
+        paid: {
+            type: Sequelize.DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
+        },
+        sessionId: {
+            type: Sequelize.DataTypes.STRING
         }
     },
     {

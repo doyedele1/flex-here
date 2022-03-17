@@ -9,7 +9,6 @@ import Cookies from 'cookies';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { formatRelativeWithOptions } from 'date-fns/fp';
 
 const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -121,16 +120,30 @@ export default function House({ house, flexhere_session, bookedDates }) {
                                                 return;
                                             }
                                             try {
+                                                const sessionResponse = await axios.post('/api/stripe/session', {
+                                                    amount: house * price * numberOfNightsBetweenDates
+                                                });
+                                                if (sessionResponse.data.status === 'error') {
+                                                    alert(sessionResponse.data.message);
+                                                    return;
+                                                }
+                                                const sessionId = sessionResponse.data.sessionId;
+                                                const stripePublicKey = sessionResponse.data.stripePublicKey;
+
                                                 const response = await axios.post('/api/reserve', {
                                                     houseId: house.id,
                                                     startDate,
                                                     endDate,
-                                                })
+                                                    sessionId
+                                                });
                                                 if (response.data.status === 'error') {
                                                     alert(response.data.message);
                                                     return;
                                                 }
                                                 console.log(response.data);
+
+                                                const stripe = Stripe(stripePublicKey);
+                                                const { error } = await stripe.redirectToCheckout({sessionId});
                                             }
                                             catch (error) {
                                                 console.log(error);

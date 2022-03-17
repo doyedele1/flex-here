@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import Nav from './Nav';
 import Modal from './Modal';
 import { useState } from 'react';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import Head from 'next/head';
 
 export default function Layout(props) {
     const showModal = useStoreState((state) => state.modals.showModal);
@@ -22,6 +24,10 @@ export default function Layout(props) {
 
     return (
         <div>
+            <Head>
+                <script src='https://js.stripe.com/v3/'></script>
+            </Head>{' '}
+
             <Nav />
             <main>{props.content}</main>
 

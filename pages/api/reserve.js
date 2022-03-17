@@ -18,7 +18,8 @@ export default async (req, res) => {
             houseId: req.body.houseId,
             userId: user.id,
             startDate: req.body.startDate,
-            endDate: req.body.endDate
+            endDate: req.body.endDate,
+            sessionId: req.body.sessionId
         }).then(() => {
             res.writeHead(200, {
                 'Content-Type': 'application/json'
