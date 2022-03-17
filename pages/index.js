@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import houses from '../houses';
 import House from '../components/House';
 import Layout from '../components/Layout';
-import { House as HouseModal } from '../model.js';
+import { House as HouseModel } from '../model.js';
 
 import Cookies from 'cookies';
 import { useStoreActions } from 'easy-peasy';
