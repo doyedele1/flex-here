@@ -121,7 +121,7 @@ export default function House({ house, flexhere_session, bookedDates }) {
                                             }
                                             try {
                                                 const sessionResponse = await axios.post('/api/stripe/session', {
-                                                    amount: house * price * numberOfNightsBetweenDates
+                                                    amount: house.price * numberOfNightsBetweenDates
                                                 });
                                                 if (sessionResponse.data.status === 'error') {
                                                     alert(sessionResponse.data.message);
@@ -130,17 +130,17 @@ export default function House({ house, flexhere_session, bookedDates }) {
                                                 const sessionId = sessionResponse.data.sessionId;
                                                 const stripePublicKey = sessionResponse.data.stripePublicKey;
 
-                                                const response = await axios.post('/api/reserve', {
+                                                const reserveResponse = await axios.post('/api/reserve', {
                                                     houseId: house.id,
                                                     startDate,
                                                     endDate,
                                                     sessionId
                                                 });
-                                                if (response.data.status === 'error') {
-                                                    alert(response.data.message);
+                                                if (reserveResponse.data.status === 'error') {
+                                                    alert(reserveResponse.data.message);
                                                     return;
                                                 }
-                                                console.log(response.data);
+                                                console.log(reserveResponse.data);
 
                                                 const stripe = Stripe(stripePublicKey);
                                                 const { error } = await stripe.redirectToCheckout({sessionId});
@@ -160,7 +160,7 @@ export default function House({ house, flexhere_session, bookedDates }) {
                                             setShowLoginModal();
                                         }}
                                     >
-                                        Log in to Reserve
+                                        Log in to reserve
                                     </button>
                                 )
                             }
